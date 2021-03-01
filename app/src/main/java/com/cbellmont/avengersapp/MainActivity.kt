@@ -1,8 +1,12 @@
 package com.cbellmont.avengersapp
 
+import FragmentAmarillo
+import FragmentRojo
+import FragmentTextView
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.cbellmont.avengersapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -15,19 +19,33 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        changeFragment(FragmentTextView())
+
         binding.navigationBottom.setOnNavigationItemSelectedListener { itemSelected ->
             when (itemSelected.itemId) {
                 R.id.option_1 -> {
-                    Toast.makeText(this,"1- Clicked on ${itemSelected.title}", Toast.LENGTH_LONG ).show()
+                    changeFragment(FragmentTextView())
                 }
                 R.id.option_2 -> {
-                    Toast.makeText(this, "2- Clicked on ${itemSelected.title}", Toast.LENGTH_LONG ).show()
+                    changeFragment(FragmentRojo())
                 }
                 R.id.option_3 -> {
-                    Toast.makeText(this, "3- Clicked on ${itemSelected.title}", Toast.LENGTH_LONG ).show()
+                    changeFragment(FragmentAmarillo())
                 }
             }
             true
         }
     }
+
+    private fun changeFragment(fragment : Fragment) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(binding.frameLayout.id, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
 }
