@@ -9,9 +9,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.cbellmont.avengersapp.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+interface MainActivityInterface{
+    fun showToastInterface(text : String)
+}
+
+class MainActivity : AppCompatActivity(), MainActivityInterface {
 
     lateinit var binding : ActivityMainBinding
+
+    private var numClick = 0
 
     // Icónos gracias a <div>Iconos diseñados por <a href="https://icon54.com/" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.es/" title="Flaticon">www.flaticon.es</a></div>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,10 +30,15 @@ class MainActivity : AppCompatActivity() {
         binding.navigationBottom.setOnNavigationItemSelectedListener { itemSelected ->
             when (itemSelected.itemId) {
                 R.id.option_1 -> {
-                    changeFragment(FragmentTextView())
+                    val fragmentTextView = FragmentTextView()
+                    val bundle = Bundle()
+                    numClick++
+                    bundle.putString("CLAVE_1", "Se ha hecho click $numClick")
+                    fragmentTextView.arguments = bundle
+                    changeFragment(fragmentTextView)
                 }
                 R.id.option_2 -> {
-                    changeFragment(FragmentRojo())
+                    changeFragment(FragmentRojo(this))
                 }
                 R.id.option_3 -> {
                     changeFragment(FragmentAmarillo())
@@ -46,6 +57,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+    }
+
+    fun showToast(text : String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showToastInterface(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
 }
